@@ -1,7 +1,7 @@
 let todos = [{
     id: 1,
     text: "Take out trash and recycling",
-    complete: true
+    complete: false
   },
   {
     id: 2,
@@ -97,12 +97,15 @@ let updateItems = () => {
   document.getElementById('remaining-count').innerHTML = spanCount;
 }
 
+window.onload = function(){
+  updateItems();
+};
+
 /* Questions for Nick:
   1. How can my code be written better?
     info: I feel like my code is very verbose and there are some areas, such as creating spanClass and idClass, and I seem to be violating the DRY principle.
   2. I tried to do a reduce method, but ultimately failed and retreated to a for loop in updateItems.
     info: when I tried to do a reduce method, my accumulator was returning a NaN, which for some reason even after debugging was not giving me the result I was looking for, so I switched to a for loop. Is there a way to do this better?
-
 
 
 
