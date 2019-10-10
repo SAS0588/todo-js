@@ -42,16 +42,19 @@ function createList(){
     // Create attributes, assign values, and set to elements
     const divClass = document.createAttribute("class");
     const inputClass = document.createAttribute("class");
+    const inputId = document.createAttribute("id");
     const spanClass = document.createAttribute("class");
     const inputType = document.createAttribute("type");
     const spanId = document.createAttribute("id");
     divClass.value = "todo";
     inputClass.value = "todo-checkbox";
+    inputId.value = "check";
     spanClass.value = "todo-text";
     inputType.value = "checkbox";
     spanId.value = todos[todo].id;
     div.setAttributeNode(divClass);
     input.setAttributeNode(inputClass);
+    input.setAttributeNode(inputId);
     input.setAttributeNode(inputType);
     span.setAttributeNode(spanClass);
     span.setAttributeNode(spanId);
@@ -63,12 +66,20 @@ function createList(){
     span.appendChild(spanItemText);
     div.appendChild(input);
     div.appendChild(span);
-  
+
     // Attach todo div to parent main div
     document.getElementById('main-todo-list').appendChild(div);
-    markComplete();
+
+    // Checks for completed tasks and adds them to the view
+    console.log(todos);
+    if (todos[todo].complete){
+      div.classList.add('complete');
+      document.getElementById('check').click();
+    };
+
   }
 }
+
 
 // removes all the children in parentNode main-todo-list
 function removeChild(){
@@ -82,11 +93,7 @@ function removeChild(){
   } 
 }
 
-
-
 // OBJECTIVE 2: Add ability to mark to-do items complete
-// function markComplete() {};=> created to be inserted after textBox creation
-
 function markComplete(){
   const divComplete = document.getElementsByClassName('todo');
   const checkboxes = document.getElementsByClassName('todo-checkbox');
@@ -96,6 +103,7 @@ function markComplete(){
         todos[i].complete = true;
         divComplete[i].classList.add('complete');
         updateItems();
+        console.log(todos);
       } else {
         todos[i].complete = false;
         divComplete[i].classList.remove('complete');
@@ -108,8 +116,7 @@ function markComplete(){
 
 
 // OBJECTIVE 3: Remaining to-do count
-
-let updateItems = () => {
+function updateItems() {
   let spanCount = 0;
   for (let i = 0; i < todos.length; i++) {
     if (todos[i].complete == false) {
@@ -119,31 +126,33 @@ let updateItems = () => {
   document.getElementById('remaining-count').innerHTML = spanCount;
 }
 
-window.onload = function(){
-  createList();
-  updateItems();
-
-};
-
 // OBJECTIVE 4: Create new to-do items
-document.addEventListener('keydown',function(event){
-  if (event.keyCode === 13){
-    grabItem();
-  }   
+document.addEventListener('keydown', function (event) {
+  if (event.keyCode === 13) {
+    const newTodo = document.getElementById("text-input").value;
+    document.getElementById("text-input").value = '';
+    if (newTodo !== '') {
+      todos.push({
+        id: todos.length + 1,
+        text: newTodo,
+        complete: false
+      });
+      createList();
+      markComplete();
+    } else {
+      console.log("i'm empty");
+    }
+  }
 });
 
-function grabItem(){
-  const newTodo = document.getElementById("text-input").value;
-  document.getElementById("text-input").value = '';
-  if (newTodo !== ''){
-    addItem(newTodo);
-  } else {
-    console.log("i'm empty");
-  }
-}
 
-function addItem(item){
-  todos.push({id: todos.length + 1, text: item, complete: false});
+
+
+
+
+
+window.onload = function(){
   createList();
-  
-}
+  markComplete();
+  updateItems();
+};
