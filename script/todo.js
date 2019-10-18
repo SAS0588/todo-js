@@ -81,12 +81,22 @@ function loadItems(){
     // Attach todo div to parent main div
     document.getElementById('main-todo-list').appendChild(div);
 
+    if (todos[todo].complete == true && hidden == true){
+      div.style.display = 'none';
+    }
+
   }
 }
 
 function addItem(){
   document.getElementById('text-input').addEventListener('keydown', function (event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13)
+    //event.key === 'enter'
+    // if i have a value that isn't going to be a constance value you write it as:
+    // CAPITAL_CONSTANTANCE_VALUE. 
+    // i.e. const ENTER_KEY_VALUE = 13;
+    
+    {
       const newTodo = document.getElementById("text-input").value;
       document.getElementById("text-input").value = '';
       if (newTodo !== '') {
@@ -108,13 +118,13 @@ function markComplete(){
   for (let i = 0; i < items.length; i++) {
     items[i].onclick = function(){
       if (todos[i].complete === false){
-        checkbox[i].click();
+        checkbox[i].checked = true;
         todos[i].complete = true;
         items[i].classList.add('complete');
         updateCount();
       }
       else {
-        checkbox[i].click();
+        checkbox[i].checked = false;
         todos[i].complete = false;
         items[i].classList.remove('complete');
         updateCount();
@@ -128,7 +138,7 @@ function integrityCheck(){
   let checkboxIntegrity = document.getElementsByClassName('todo-checkbox');
   for (let i = 0; i <todos.length; i++){
     if (todos[i].complete === true){
-      checkboxIntegrity[i].click();
+      checkboxIntegrity[i].checked = true;
       itemsIntegrity[i].classList.add('complete');
     }
     else {
